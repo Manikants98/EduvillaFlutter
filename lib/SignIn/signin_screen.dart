@@ -1,4 +1,8 @@
+// ignore_for_file: unrelated_type_equality_checks, use_build_context_synchronously
+
 import 'package:flutter/material.dart';
+import 'package:mkx/APIs/apis.dart';
+import 'package:mkx/main.dart';
 
 class SignInPage extends StatefulWidget {
   const SignInPage({super.key});
@@ -8,6 +12,8 @@ class SignInPage extends StatefulWidget {
 }
 
 final _formKey = GlobalKey<FormState>();
+TextEditingController emailController = TextEditingController();
+TextEditingController passwordController = TextEditingController();
 
 class _SignInPageState extends State<SignInPage> {
   @override
@@ -16,63 +22,87 @@ class _SignInPageState extends State<SignInPage> {
     return Form(
       key: _formKey,
       child: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(10.0),
         child: SingleChildScrollView(
           child: Column(
             children: <Widget>[
               const Padding(
-                padding: EdgeInsets.all(10.0),
-                child: Text(
-                  "Sign In",
-                  style: TextStyle(fontSize: 40),
+                padding: EdgeInsets.all(20.0),
+                child: Column(
+                  children: [
+                    Text(
+                      "Sign In",
+                      style: TextStyle(fontSize: 40),
+                    ),
+                    Text("Welcome back! Let's get you signed in."),
+                  ],
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextFormField(
-                  decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      hintText: 'Enter Your Email',
-                      labelText: "Email"),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please Enter Your Email';
-                    }
-                    return null;
-                  },
+                padding: const EdgeInsets.all(10.0),
+                child: SizedBox(
+                  height: 50.0,
+                  child: TextFormField(
+                    controller: emailController,
+                    decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                        hintText: 'Enter Your Email',
+                        labelText: "Email"),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please Enter Your Email';
+                      }
+                      return null;
+                    },
+                  ),
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextFormField(
-                  decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      hintText: 'Enter Your Password',
-                      labelText: "Password"),
-                  // The validator receives the text that the user has entered.
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please Enter Your Password';
-                    }
-                    return null;
-                  },
+                padding: const EdgeInsets.all(10.0),
+                child: SizedBox(
+                  height: 50.0,
+                  child: TextFormField(
+                    controller: passwordController,
+                    decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                        hintText: 'Enter Your Password',
+                        labelText: "Password"),
+                    // The validator receives the text that the user has entered.
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please Enter Your Password';
+                      }
+                      return null;
+                    },
+                  ),
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 16),
                 child: ElevatedButton(
-                  onPressed: () {
-                    // Validate returns true if the form is valid, or false otherwise.
+                  onPressed: () async {
                     if (_formKey.currentState!.validate()) {
-                      // If the form is valid, display a snackbar. In the real world,
-                      // you'd often call a server or save the information in a database.
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Processing Data')),
-                      );
+                      var data = await login(
+                          emailController.text, passwordController.text);
+
+                      if (data == "Login successfull") {
+                        MyHomePage(title: '$data', page: "Login");
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Processing Data')),
+                        );
+                      }
                     }
                   },
                   child: const Text('Sign In'),
                 ),
+              ),
+              const Divider(),
+              const Text("Don't have an account"),
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: ElevatedButton(
+                    onPressed: () {}, child: const Text("Sign Up")),
               )
             ],
           ),

@@ -1,4 +1,6 @@
+// ignore_for_file: must_be_immutable
 import 'package:flutter/material.dart';
+import 'package:get/get_navigation/get_navigation.dart';
 import 'package:mkx/AboutUs/about_us_screen.dart';
 import 'package:mkx/ContactUs/contact_us_screen.dart';
 import 'package:mkx/Courses/courses.dart';
@@ -7,6 +9,7 @@ import 'package:mkx/Profile/profile.dart';
 import 'package:mkx/SignIn/signin_screen.dart';
 import 'package:mkx/SignUp/signup_screen.dart';
 import 'package:mkx/Users/users.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   runApp(const MyApp());
@@ -17,20 +20,25 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Home Page'),
+      home: MyHomePage(title: 'Home Page'),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+  MyHomePage({
+    super.key,
+    required this.title,
+    this.page,
+  });
   final String title;
+  String? page;
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -38,11 +46,33 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   var currentPage = "Home";
+  var isLoggedIn = false;
 
-  void handleChangePage(page) {
+  void handleChangePage(page) async {
     setState(() {
       currentPage = page;
     });
+  }
+
+  void isLoggedInFn() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    if ((prefs.getString('token').toString().isNotEmpty)) {
+      setState(() {
+        isLoggedIn = true;
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    isLoggedInFn();
+    setState(() {
+      widget.page.toString().isEmpty
+          ? currentPage == "Home"
+          : currentPage = widget.page.toString();
+    });
+
+    super.initState();
   }
 
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
@@ -52,6 +82,12 @@ class _MyHomePageState extends State<MyHomePage> {
       key: scaffoldKey,
       appBar: AppBar(
         elevation: 10,
+        title: InkWell(
+          onTap: () {
+            handleChangePage("Home");
+          },
+          child: const Text("Edu-Villa™"),
+        ),
         leading: IconButton(
           icon: const Icon(Icons.menu),
           onPressed: () {
@@ -61,31 +97,39 @@ class _MyHomePageState extends State<MyHomePage> {
         actions: [
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: (ElevatedButton(
-                onPressed: () {},
-                child: Row(
-                  children: [
-                    InkWell(
-                      onTap: () {
-                        handleChangePage("Sign Up");
-                      },
-                      child: const Text("Sign Up"),
+            child: isLoggedIn == true
+                ? (ElevatedButton(
+                    onPressed: () {},
+                    child: Row(
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            handleChangePage("Sign Up");
+                          },
+                          child: const Text("Sign Up"),
+                        ),
+                        const Text("/"),
+                        InkWell(
+                          onTap: () {
+                            handleChangePage("Sign In");
+                          },
+                          child: const Text("Sign In"),
+                        ),
+                      ],
+                    )))
+                : InkWell(
+                    onTap: () {
+                      handleChangePage("Profile");
+                    },
+                    child: const CircleAvatar(
+                      child: Icon(Icons.person),
                     ),
-                    const Text("/"),
-                    InkWell(
-                      onTap: () {
-                        handleChangePage("Sign In");
-                      },
-                      child: const Text("Sign In"),
-                    ),
-                  ],
-                ))),
+                  ),
           )
         ],
       ),
       drawer: Drawer(
         child: ListView(
-          // Important: Remove any padding from the ListView.
           children: [
             const ListTile(
               title: SizedBox(
@@ -154,8 +198,8 @@ class _MyHomePageState extends State<MyHomePage> {
       // ignore: avoid_unnecessary_containers
       body: Container(
           child: Center(
-              child: currentPage == "Home"
-                  ? const HomePage()
+              child: currentPage == "Profile"
+                  ? const ProfilePage()
                   : currentPage == "About Us"
                       ? const AboutUsPage()
                       : currentPage == "Contact Us"
@@ -168,7 +212,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                       ? const SignUpPage()
                                       : currentPage == "Sign In"
                                           ? const SignInPage()
-                                          : const ProfilePage())),
+                                          : const HomePage())),
       floatingActionButton: FloatingActionButton(
         tooltip: 'Increment',
         onPressed: () {},
