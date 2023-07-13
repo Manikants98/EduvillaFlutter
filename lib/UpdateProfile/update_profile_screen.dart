@@ -1,15 +1,13 @@
 // ignore_for_file: unrelated_type_equality_checks, use_build_context_synchronously
 
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:mkx/APIs/apis.dart';
-import 'package:mkx/main.dart';
 
-class SignUpPage extends StatefulWidget {
-  const SignUpPage({super.key});
+class UpdateProfilePage extends StatefulWidget {
+  const UpdateProfilePage({super.key});
 
   @override
-  State<SignUpPage> createState() => _SignUpPageState();
+  State<UpdateProfilePage> createState() => _UpdateProfilePageState();
 }
 
 final _formKey = GlobalKey<FormState>();
@@ -18,7 +16,7 @@ TextEditingController emailController = TextEditingController();
 TextEditingController passwordController = TextEditingController();
 TextEditingController confirmPasswordController = TextEditingController();
 
-class _SignUpPageState extends State<SignUpPage> {
+class _UpdateProfilePageState extends State<UpdateProfilePage> {
   @override
   Widget build(BuildContext context) {
     // ignore: avoid_unnecessary_containers
@@ -34,10 +32,10 @@ class _SignUpPageState extends State<SignUpPage> {
                 child: Column(
                   children: [
                     Text(
-                      "Sign Up",
+                      "Update Profile",
                       style: TextStyle(fontSize: 40),
                     ),
-                    Text("Ready to get started? Sign up now!"),
+                    Text("Ready to get started? Update Profile now!"),
                   ],
                 ),
               ),
@@ -131,6 +129,9 @@ class _SignUpPageState extends State<SignUpPage> {
                     if (_formKey.currentState!.validate()) {
                       await register(nameController.text, emailController.text,
                           passwordController.text);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Processing Data')),
+                      );
                     }
                   },
                   child: const Text('Sign Up'),
@@ -141,13 +142,7 @@ class _SignUpPageState extends State<SignUpPage> {
               Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: ElevatedButton(
-                    onPressed: () {
-                      Get.offAll(() => MyHomePage(
-                            title: "Edu-Villa™",
-                            page: "Sign In",
-                          ));
-                    },
-                    child: const Text("Sign In")),
+                    onPressed: () {}, child: const Text("Sign In")),
               )
             ],
           ),

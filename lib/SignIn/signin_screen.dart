@@ -1,6 +1,7 @@
 // ignore_for_file: unrelated_type_equality_checks, use_build_context_synchronously
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:mkx/APIs/apis.dart';
 import 'package:mkx/main.dart';
 
@@ -62,6 +63,7 @@ class _SignInPageState extends State<SignInPage> {
                 child: SizedBox(
                   height: 50.0,
                   child: TextFormField(
+                    obscureText: true,
                     controller: passwordController,
                     decoration: const InputDecoration(
                         border: OutlineInputBorder(),
@@ -82,16 +84,8 @@ class _SignInPageState extends State<SignInPage> {
                 child: ElevatedButton(
                   onPressed: () async {
                     if (_formKey.currentState!.validate()) {
-                      var data = await login(
+                      await login(
                           emailController.text, passwordController.text);
-
-                      if (data == "Login successfull") {
-                        MyHomePage(title: '$data', page: "Login");
-                      } else {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Processing Data')),
-                        );
-                      }
                     }
                   },
                   child: const Text('Sign In'),
@@ -102,7 +96,13 @@ class _SignInPageState extends State<SignInPage> {
               Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: ElevatedButton(
-                    onPressed: () {}, child: const Text("Sign Up")),
+                    onPressed: () {
+                      Get.offAll(() => MyHomePage(
+                            title: "Edu-Villa™",
+                            page: "Sign Up",
+                          ));
+                    },
+                    child: const Text("Sign Up")),
               )
             ],
           ),

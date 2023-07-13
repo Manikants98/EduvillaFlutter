@@ -8,10 +8,13 @@ import 'package:mkx/Home/home_screen.dart';
 import 'package:mkx/Profile/profile.dart';
 import 'package:mkx/SignIn/signin_screen.dart';
 import 'package:mkx/SignUp/signup_screen.dart';
+import 'package:mkx/UpdateProfile/update_profile_screen.dart';
 import 'package:mkx/Users/users.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await SharedPreferences.getInstance();
   runApp(const MyApp());
 }
 
@@ -56,7 +59,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void isLoggedInFn() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    if ((prefs.getString('token').toString().isNotEmpty)) {
+    if ((prefs.getString('token') != null)) {
       setState(() {
         isLoggedIn = true;
       });
@@ -97,7 +100,7 @@ class _MyHomePageState extends State<MyHomePage> {
         actions: [
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: isLoggedIn == true
+            child: !isLoggedIn
                 ? (ElevatedButton(
                     onPressed: () {},
                     child: Row(
@@ -157,6 +160,7 @@ class _MyHomePageState extends State<MyHomePage> {
               title: const Text('Profile'),
               onTap: () {
                 handleChangePage("Profile");
+                print(isLoggedIn);
                 scaffoldKey.currentState?.closeDrawer();
               },
             ),
@@ -212,7 +216,9 @@ class _MyHomePageState extends State<MyHomePage> {
                                       ? const SignUpPage()
                                       : currentPage == "Sign In"
                                           ? const SignInPage()
-                                          : const HomePage())),
+                                          : currentPage == "Update Profile"
+                                              ? const UpdateProfilePage()
+                                              : const HomePage())),
       floatingActionButton: FloatingActionButton(
         tooltip: 'Increment',
         onPressed: () {},

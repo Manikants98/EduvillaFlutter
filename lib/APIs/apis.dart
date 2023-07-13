@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mkx/main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -26,7 +27,10 @@ Future login(email, password) async {
         .post('$baseURL/login', data: {'email': email, 'password': password});
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString('token', response.data[0]["token"]);
-    print("Successfully logged in");
+    Get.snackbar('', '${response.data[0]["name"]}, Successfully Logged In',
+        boxShadows: [const BoxShadow(color: Colors.black)],
+        backgroundColor: (Colors.white),
+        snackPosition: SnackPosition.BOTTOM);
     Get.offAll(() => MyHomePage(
           title: "Edu-Villa™",
           page: "Home",
@@ -45,7 +49,7 @@ Future<List> profile() async {
       '$baseURL/profile?token=${prefs.getString('token')}',
     );
     List profileData = response.data;
-    print('${profileData}----apisProfile');
+
     return profileData;
   } catch (e) {
     throw Exception();
