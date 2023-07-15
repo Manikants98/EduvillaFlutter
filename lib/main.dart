@@ -1,6 +1,8 @@
 // ignore_for_file: must_be_immutable
+// unnecessary_non_null_assertion
 import 'package:flutter/material.dart';
-import 'package:get/get_navigation/get_navigation.dart';
+import 'package:get/get.dart';
+import 'package:mkx/APIs/apis.dart';
 import 'package:mkx/AboutUs/about_us_screen.dart';
 import 'package:mkx/ContactUs/contact_us_screen.dart';
 import 'package:mkx/Courses/courses.dart';
@@ -27,6 +29,8 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
+        // colorScheme: const ColorScheme.dark(),
+
         useMaterial3: true,
       ),
       home: MyHomePage(title: 'Home Page'),
@@ -50,6 +54,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   var currentPage = "Home";
   var isLoggedIn = false;
+  var profiles = {};
 
   void handleChangePage(page) async {
     setState(() {
@@ -57,11 +62,11 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  void isLoggedInFn() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    if ((prefs.getString('token') != null)) {
+  void profileData() async {
+    List data = await profile();
+    if (data.isNotEmpty) {
       setState(() {
-        isLoggedIn = true;
+        profiles = data[0];
       });
     }
   }
@@ -74,8 +79,17 @@ class _MyHomePageState extends State<MyHomePage> {
           ? currentPage == "Home"
           : currentPage = widget.page.toString();
     });
-
     super.initState();
+  }
+
+  void isLoggedInFn() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    if ((prefs.getString('token')!.isNotEmpty)) {
+      setState(() {
+        isLoggedIn = true;
+        profileData();
+      });
+    }
   }
 
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
@@ -89,7 +103,7 @@ class _MyHomePageState extends State<MyHomePage> {
           onTap: () {
             handleChangePage("Home");
           },
-          child: const Text("Edu-Villa™"),
+          child: Text("Edu-Villa™ ${isLoggedIn}"),
         ),
         leading: IconButton(
           icon: const Icon(Icons.menu),
@@ -98,37 +112,112 @@ class _MyHomePageState extends State<MyHomePage> {
           },
         ),
         actions: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: !isLoggedIn
-                ? (ElevatedButton(
-                    onPressed: () {},
-                    child: Row(
-                      children: [
-                        InkWell(
-                          onTap: () {
-                            handleChangePage("Sign Up");
-                          },
-                          child: const Text("Sign Up"),
+          if (isLoggedIn)
+            PopupMenuButton(
+                position: PopupMenuPosition.under,
+                offset: const Offset(11, 11),
+                icon: CircleAvatar(
+                    backgroundImage: NetworkImage('${profiles['profile_url']}'),
+                    child:
+                        Text("${profiles['name'][0].toString().capitalize}")),
+                itemBuilder: (context) {
+                  return [
+                    PopupMenuItem<int>(
+                      padding: const EdgeInsets.all(0),
+                      value: 0,
+                      child: SizedBox(
+                        child: Center(
+                          child: Column(
+                            children: [
+                              CircleAvatar(
+                                radius: 25,
+                                child: Text(
+                                    "${profiles['name'][0].toString().capitalize}"),
+                              ),
+                              Text("${profiles['name']}"),
+                              Text("${profiles['email']}"),
+                              const Divider()
+                            ],
+                          ),
                         ),
-                        const Text("/"),
-                        InkWell(
-                          onTap: () {
-                            handleChangePage("Sign In");
-                          },
-                          child: const Text("Sign In"),
-                        ),
-                      ],
-                    )))
-                : InkWell(
-                    onTap: () {
-                      handleChangePage("Profile");
-                    },
-                    child: const CircleAvatar(
-                      child: Icon(Icons.person),
+                      ),
                     ),
-                  ),
-          )
+                    const PopupMenuItem<int>(
+                      padding: EdgeInsets.all(2),
+                      value: 0,
+                      child: Row(
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Icon(Icons.person),
+                          ),
+                          Text("My Account"),
+                        ],
+                      ),
+                    ),
+                    const PopupMenuItem<int>(
+                      padding: EdgeInsets.all(2),
+                      value: 1,
+                      child: Row(
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Icon(Icons.settings),
+                          ),
+                          Text("Setting"),
+                        ],
+                      ),
+                    ),
+                    const PopupMenuItem<int>(
+                      padding: EdgeInsets.all(2),
+                      value: 2,
+                      child: Row(
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Icon(Icons.exit_to_app),
+                          ),
+                          Text("Log Out"),
+                        ],
+                      ),
+                    ),
+                  ];
+                },
+                onSelected: (value) async {
+                  if (value == 0) {
+                    handleChangePage("Profile");
+                  } else if (value == 1) {
+                    print("Settings menu is selected.");
+                  } else if (value == 2) {
+                    SharedPreferences prefs =
+                        await SharedPreferences.getInstance();
+                    prefs.setString("token", "");
+                    Get.offAll(() => MyHomePage(
+                          title: "Edu-Villa™",
+                          page: "Home",
+                        ));
+                  }
+                })
+          else
+            ElevatedButton(
+                onPressed: () {},
+                child: Row(
+                  children: [
+                    InkWell(
+                      onTap: () {
+                        handleChangePage("Sign Up");
+                      },
+                      child: const Text("Sign Up"),
+                    ),
+                    const Text("/"),
+                    InkWell(
+                      onTap: () {
+                        handleChangePage("Sign In");
+                      },
+                      child: const Text("Sign In"),
+                    ),
+                  ],
+                ))
         ],
       ),
       drawer: Drawer(

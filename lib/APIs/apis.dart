@@ -48,10 +48,12 @@ Future<List> profile() async {
     final response = await dio.get(
       '$baseURL/profile?token=${prefs.getString('token')}',
     );
+    print(response);
     List profileData = response.data;
 
     return profileData;
   } catch (e) {
+    print(e);
     throw Exception();
   }
 }

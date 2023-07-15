@@ -24,7 +24,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   void isLoggedInFn() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    if (prefs.getString('token') != null) {
+    if (prefs.getString('token')!.isNotEmpty) {
       profileData();
     } else {
       Get.offAll(() => MyHomePage(
@@ -36,9 +36,12 @@ class _ProfilePageState extends State<ProfilePage> {
 
   void profileData() async {
     List data = await profile();
-    setState(() {
-      profiles = data[0];
-    });
+    print('$data');
+    if (data.isNotEmpty) {
+      setState(() {
+        profiles = data[0];
+      });
+    }
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text('Profile Data Get Successfully')),
     );
