@@ -10,6 +10,12 @@ class UsersPage extends StatefulWidget {
 class _UsersPageState extends State<UsersPage> {
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(body: Center(child: Text("Users")));
+    return Scaffold(
+        body: Column(
+      children: [
+        Image.asset('asset/images/aboutus.png'),
+        const Text("Users"),
+      ],
+    ));
   }
 }

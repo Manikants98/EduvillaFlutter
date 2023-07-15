@@ -10,6 +10,12 @@ class ContactUsPage extends StatefulWidget {
 class _ContactUsPageState extends State<ContactUsPage> {
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(body: Center(child: Text("Contact Us")));
+    return Scaffold(
+        body: Column(
+      children: [
+        Image.asset('asset/images/contactus.png'),
+        const Text("Contact Us"),
+      ],
+    ));
   }
 }

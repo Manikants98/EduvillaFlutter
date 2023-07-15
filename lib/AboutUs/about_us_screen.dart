@@ -10,6 +10,13 @@ class AboutUsPage extends StatefulWidget {
 class _AboutUsPageState extends State<AboutUsPage> {
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(body: Center(child: Text("About us")));
+    return Scaffold(
+        body: Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Image.asset('asset/images/aboutus2.png'),
+        const Text("About Us"),
+      ],
+    ));
   }
 }

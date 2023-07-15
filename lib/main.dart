@@ -27,6 +27,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
         // colorScheme: const ColorScheme.dark(),
@@ -84,7 +85,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void isLoggedInFn() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    if ((prefs.getString('token')!.isNotEmpty)) {
+    if ((prefs.getString('token') != null)) {
       setState(() {
         isLoggedIn = true;
         profileData();
@@ -103,7 +104,8 @@ class _MyHomePageState extends State<MyHomePage> {
           onTap: () {
             handleChangePage("Home");
           },
-          child: Text("Edu-Villa™ ${isLoggedIn}"),
+          child: const Text("Edu-Villa™",
+              style: TextStyle(fontWeight: FontWeight.bold)),
         ),
         leading: IconButton(
           icon: const Icon(Icons.menu),
@@ -117,9 +119,14 @@ class _MyHomePageState extends State<MyHomePage> {
                 position: PopupMenuPosition.under,
                 offset: const Offset(11, 11),
                 icon: CircleAvatar(
-                    backgroundImage: NetworkImage('${profiles['profile_url']}'),
+                    backgroundImage:
+                        NetworkImage(('${profiles['profile_url']}')),
+                    onBackgroundImageError: (exception, stackTrace) =>
+                        CircleAvatar(
+                            child: Text(
+                                "${profiles['name']?[0].toString().capitalize}")),
                     child:
-                        Text("${profiles['name'][0].toString().capitalize}")),
+                        Text("${profiles['name']?[0].toString().capitalize}")),
                 itemBuilder: (context) {
                   return [
                     PopupMenuItem<int>(
@@ -131,8 +138,14 @@ class _MyHomePageState extends State<MyHomePage> {
                             children: [
                               CircleAvatar(
                                 radius: 25,
+                                backgroundImage:
+                                    NetworkImage('${profiles['profile_url']}'),
+                                onBackgroundImageError:
+                                    (exception, stackTrace) => CircleAvatar(
+                                        child: Text(
+                                            "${profiles['name']?[0].toString().capitalize}")),
                                 child: Text(
-                                    "${profiles['name'][0].toString().capitalize}"),
+                                    "${profiles['name']?[0].toString().capitalize}"),
                               ),
                               Text("${profiles['name']}"),
                               Text("${profiles['email']}"),
@@ -191,7 +204,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   } else if (value == 2) {
                     SharedPreferences prefs =
                         await SharedPreferences.getInstance();
-                    prefs.setString("token", "");
+                    prefs.clear();
                     Get.offAll(() => MyHomePage(
                           title: "Edu-Villa™",
                           page: "Home",
