@@ -31,7 +31,6 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
         // colorScheme: const ColorScheme.dark(),
-
         useMaterial3: true,
       ),
       home: MyHomePage(title: 'Home Page'),
@@ -99,7 +98,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       key: scaffoldKey,
       appBar: AppBar(
-        elevation: 10,
+        elevation: 20,
         title: InkWell(
           onTap: () {
             handleChangePage("Home");
@@ -212,25 +211,32 @@ class _MyHomePageState extends State<MyHomePage> {
                   }
                 })
           else
-            ElevatedButton(
-                onPressed: () {},
-                child: Row(
-                  children: [
-                    InkWell(
-                      onTap: () {
-                        handleChangePage("Sign Up");
-                      },
-                      child: const Text("Sign Up"),
-                    ),
-                    const Text("/"),
-                    InkWell(
-                      onTap: () {
-                        handleChangePage("Sign In");
-                      },
-                      child: const Text("Sign In"),
-                    ),
-                  ],
-                ))
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ElevatedButton(
+                  onPressed: () {},
+                  child: Row(
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          handleChangePage("Sign Up");
+                        },
+                        child: const Text(
+                          "Sign Up",
+                          style: TextStyle(color: (Colors.black)),
+                        ),
+                      ),
+                      const Text("/"),
+                      InkWell(
+                        onTap: () {
+                          handleChangePage("Sign In");
+                        },
+                        child: const Text("Sign In",
+                            style: TextStyle(color: (Colors.black))),
+                      ),
+                    ],
+                  )),
+            )
         ],
       ),
       drawer: Drawer(
@@ -239,9 +245,8 @@ class _MyHomePageState extends State<MyHomePage> {
             const ListTile(
               title: SizedBox(
                 child: Text(
-                  'EduVilla',
+                  "Edu-Villa™",
                   style: TextStyle(
-                    color: Colors.black,
                     fontSize: 25,
                     fontWeight: FontWeight.bold,
                   ),

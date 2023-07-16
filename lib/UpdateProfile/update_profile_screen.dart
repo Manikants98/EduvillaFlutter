@@ -1,7 +1,6 @@
 // ignore_for_file: unrelated_type_equality_checks, use_build_context_synchronously
 
 import 'package:flutter/material.dart';
-import 'package:mkx/APIs/apis.dart';
 
 class UpdateProfilePage extends StatefulWidget {
   const UpdateProfilePage({super.key});
@@ -125,25 +124,10 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 16),
                 child: ElevatedButton(
-                  onPressed: () async {
-                    if (_formKey.currentState!.validate()) {
-                      await register(nameController.text, emailController.text,
-                          passwordController.text);
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Processing Data')),
-                      );
-                    }
-                  },
-                  child: const Text('Sign Up'),
+                  onPressed: () async {},
+                  child: const Text('Update Profile'),
                 ),
               ),
-              const Divider(),
-              const Text("Already have an account"),
-              Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: ElevatedButton(
-                    onPressed: () {}, child: const Text("Sign In")),
-              )
             ],
           ),
         ),
