@@ -41,42 +41,36 @@ class _SignInPageState extends State<SignInPage> {
               ),
               Padding(
                 padding: const EdgeInsets.all(10.0),
-                child: SizedBox(
-                  height: 50.0,
-                  child: TextFormField(
-                    controller: emailController,
-                    decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        hintText: 'Enter Your Email',
-                        labelText: "Email"),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please Enter Your Email';
-                      }
-                      return null;
-                    },
-                  ),
+                child: TextFormField(
+                  controller: emailController,
+                  decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      hintText: 'Enter Your Email',
+                      labelText: "Email"),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please Enter Your Email';
+                    }
+                    return null;
+                  },
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.all(10.0),
-                child: SizedBox(
-                  height: 50.0,
-                  child: TextFormField(
-                    obscureText: true,
-                    controller: passwordController,
-                    decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        hintText: 'Enter Your Password',
-                        labelText: "Password"),
-                    // The validator receives the text that the user has entered.
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please Enter Your Password';
-                      }
-                      return null;
-                    },
-                  ),
+                child: TextFormField(
+                  obscureText: true,
+                  controller: passwordController,
+                  decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      hintText: 'Enter Your Password',
+                      labelText: "Password"),
+                  // The validator receives the text that the user has entered.
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please Enter Your Password';
+                    }
+                    return null;
+                  },
                 ),
               ),
               Padding(

@@ -36,6 +36,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   dio: ^5.2.1+1
   get:
+  shimmer: ^2.0.0
   shared_preferences:
 dev_dependencies:
   flutter_test:
@@ -76,12 +77,10 @@ flutter:
   # example:
   assets:
     - asset/images/
-  # fonts:
-  #   - family: Poppins
-  #     fonts:
-  #       - asset: fonts/Poppins-Regular.ttf
-  #       - asset: fonts/Poppins-Regular.ttf
-  #         style: italic
+  fonts:
+    - family: Poppins
+      fonts:
+        - asset: asset\fonts\Poppins-Regular.ttf
 
   #
   # For details regarding fonts from package dependencies,

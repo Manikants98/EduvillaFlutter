@@ -1,6 +1,7 @@
 // ignore_for_file: unrelated_type_equality_checks, use_build_context_synchronously
 
 import 'package:flutter/material.dart';
+import 'package:mkx/APIs/apis.dart';
 
 class UpdateProfilePage extends StatefulWidget {
   const UpdateProfilePage({super.key});
@@ -11,9 +12,14 @@ class UpdateProfilePage extends StatefulWidget {
 
 final _formKey = GlobalKey<FormState>();
 TextEditingController nameController = TextEditingController();
-TextEditingController emailController = TextEditingController();
-TextEditingController passwordController = TextEditingController();
-TextEditingController confirmPasswordController = TextEditingController();
+TextEditingController profileUrlController = TextEditingController();
+TextEditingController dobController = TextEditingController();
+TextEditingController genderController = TextEditingController();
+TextEditingController phoneController = TextEditingController();
+TextEditingController zipcodeController = TextEditingController();
+TextEditingController countryController = TextEditingController();
+TextEditingController stateController = TextEditingController();
+TextEditingController cityController = TextEditingController();
 
 class _UpdateProfilePageState extends State<UpdateProfilePage> {
   @override
@@ -40,6 +46,17 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
               ),
               Padding(
                 padding: const EdgeInsets.all(10.0),
+                child: TextFormField(
+                  controller: profileUrlController,
+                  decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      hintText: 'Enter Profile URL',
+                      labelText: "Profile Url"),
+                  // The validator receives the text that the user has entered.
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(10.0),
                 child: SizedBox(
                   height: 50.0,
                   child: TextFormField(
@@ -49,12 +66,6 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
                         hintText: 'Enter Your Name',
                         labelText: "Name"),
                     // The validator receives the text that the user has entered.
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please Enter Your Name';
-                      }
-                      return null;
-                    },
                   ),
                 ),
               ),
@@ -63,18 +74,12 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
                 child: SizedBox(
                   height: 50.0,
                   child: TextFormField(
-                    controller: emailController,
+                    controller: dobController,
                     decoration: const InputDecoration(
                         border: OutlineInputBorder(),
-                        hintText: 'Enter Your Email',
-                        labelText: "Email"),
+                        hintText: 'Enter Your Date Of Birth',
+                        labelText: "DOB"),
                     // The validator receives the text that the user has entered.
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please Enter Your Email';
-                      }
-                      return null;
-                    },
                   ),
                 ),
               ),
@@ -83,48 +88,109 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
                 child: SizedBox(
                   height: 50.0,
                   child: TextFormField(
-                    controller: passwordController,
-                    obscureText: true,
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      hintText: 'Enter Your Password',
-                      labelText: "Password",
-                    ),
-                    // The validator receives the text that the user has entered.
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please Enter Your Password';
-                      }
-                      return null;
-                    },
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: SizedBox(
-                  height: 50.0,
-                  child: TextFormField(
-                    obscureText: true,
-                    controller: confirmPasswordController,
+                    controller: genderController,
                     decoration: const InputDecoration(
                         border: OutlineInputBorder(),
-                        hintText: 'Enter Your Password Again',
-                        labelText: "Confirm Password"),
+                        hintText: 'Enter Your Gender',
+                        labelText: "Gender"),
                     // The validator receives the text that the user has entered.
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please Enter Your Password Again';
-                      }
-                      return null;
-                    },
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: SizedBox(
+                  height: 50.0,
+                  child: TextFormField(
+                    controller: phoneController,
+                    decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                        hintText: 'Enter Your Phone Number',
+                        labelText: "Phone"),
+                    // The validator receives the text that the user has entered.
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: SizedBox(
+                  height: 50.0,
+                  child: TextFormField(
+                    controller: zipcodeController,
+                    decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                        hintText: 'Enter Your Zipcode',
+                        labelText: "Zipcode"),
+                    // The validator receives the text that the user has entered.
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: SizedBox(
+                  height: 50.0,
+                  child: TextFormField(
+                    controller: countryController,
+                    decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                        hintText: 'Enter Your Country',
+                        labelText: "Cuntry"),
+                    // The validator receives the text that the user has entered.
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: SizedBox(
+                  height: 50.0,
+                  child: TextFormField(
+                    controller: stateController,
+                    decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                        hintText: 'Enter Your State',
+                        labelText: "State"),
+                    // The validator receives the text that the user has entered.
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: SizedBox(
+                  height: 50.0,
+                  child: TextFormField(
+                    controller: cityController,
+                    decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                        hintText: 'Enter Your City',
+                        labelText: "City"),
+                    // The validator receives the text that the user has entered.
                   ),
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 16),
                 child: ElevatedButton(
-                  onPressed: () async {},
+                  onPressed: () async {
+                    if (_formKey.currentState!.validate()) {
+                      var message = await updateProfile(
+                          nameController.text,
+                          genderController.text,
+                          countryController.text,
+                          cityController.text,
+                          stateController.text,
+                          phoneController.text,
+                          profileUrlController.text,
+                          zipcodeController.text,
+                          dobController.text);
+                      if (message.isNotEmpty) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Profile Updated Succefully'),
+                          ),
+                        );
+                      }
+                    }
+                  },
                   child: const Text('Update Profile'),
                 ),
               ),

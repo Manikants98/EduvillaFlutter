@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import 'package:mkx/APIs/apis.dart';
 import 'package:mkx/AboutUs/about_us_screen.dart';
 import 'package:mkx/ContactUs/contact_us_screen.dart';
-import 'package:mkx/Courses/courses.dart';
+import 'package:mkx/Courses/courses_screen.dart';
 import 'package:mkx/Home/home_screen.dart';
 import 'package:mkx/Profile/profile.dart';
 import 'package:mkx/SignIn/signin_screen.dart';
@@ -29,6 +29,7 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
+        fontFamily: 'Poppins',
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
         // colorScheme: const ColorScheme.dark(),
         useMaterial3: true,
@@ -55,19 +56,30 @@ class _MyHomePageState extends State<MyHomePage> {
   var currentPage = "Home";
   var isLoggedIn = false;
   var profiles = {};
+  var isLoading = false;
 
   void handleChangePage(page) async {
-    setState(() {
-      currentPage = page;
-    });
+    if (mounted) {
+      setState(() {
+        currentPage = page;
+      });
+    }
   }
 
   void profileData() async {
-    List data = await profile();
-    if (data.isNotEmpty) {
+    if (mounted) {
       setState(() {
-        profiles = data[0];
+        isLoading = true;
       });
+      List data = await profile();
+      if (data.isNotEmpty) {
+        setState(() {
+          profiles = data[0];
+        });
+        setState(() {
+          isLoading = false;
+        });
+      }
     }
   }
 
@@ -81,6 +93,18 @@ class _MyHomePageState extends State<MyHomePage> {
     });
     super.initState();
   }
+
+  final Map<String, Widget> pages = {
+    "Profile": const ProfilePage(),
+    "About Us": const AboutUsPage(),
+    "Contact Us": const ContactUsPage(),
+    "Users": const UsersPage(),
+    "Courses": const CoursesPage(),
+    "Sign Up": const SignUpPage(),
+    "Sign In": const SignInPage(),
+    "Update Profile": const UpdateProfilePage(),
+    "Home": const HomePage(),
+  };
 
   void isLoggedInFn() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -117,15 +141,16 @@ class _MyHomePageState extends State<MyHomePage> {
             PopupMenuButton(
                 position: PopupMenuPosition.under,
                 offset: const Offset(11, 11),
-                icon: CircleAvatar(
-                    backgroundImage:
-                        NetworkImage(('${profiles['profile_url']}')),
-                    onBackgroundImageError: (exception, stackTrace) =>
-                        CircleAvatar(
-                            child: Text(
-                                "${profiles['name']?[0].toString().capitalize}")),
-                    child:
-                        Text("${profiles['name']?[0].toString().capitalize}")),
+                icon: isLoading
+                    ? const CircularProgressIndicator()
+                    : CircleAvatar(
+                        backgroundImage:
+                            NetworkImage(('${profiles['profile_url']}')),
+                        onBackgroundImageError: (exception, stackTrace) =>
+                            CircleAvatar(
+                                child: Text(
+                                    "${profiles['name']?[0].toString().capitalize}")),
+                      ),
                 itemBuilder: (context) {
                   return [
                     PopupMenuItem<int>(
@@ -136,15 +161,13 @@ class _MyHomePageState extends State<MyHomePage> {
                           child: Column(
                             children: [
                               CircleAvatar(
-                                radius: 25,
+                                radius: 30,
                                 backgroundImage:
                                     NetworkImage('${profiles['profile_url']}'),
                                 onBackgroundImageError:
                                     (exception, stackTrace) => CircleAvatar(
                                         child: Text(
                                             "${profiles['name']?[0].toString().capitalize}")),
-                                child: Text(
-                                    "${profiles['name']?[0].toString().capitalize}"),
                               ),
                               Text("${profiles['name']}"),
                               Text("${profiles['email']}"),
@@ -213,29 +236,32 @@ class _MyHomePageState extends State<MyHomePage> {
           else
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: ElevatedButton(
-                  onPressed: () {},
-                  child: Row(
-                    children: [
-                      InkWell(
-                        onTap: () {
-                          handleChangePage("Sign Up");
-                        },
-                        child: const Text(
-                          "Sign Up",
-                          style: TextStyle(color: (Colors.black)),
+              child: Padding(
+                padding: const EdgeInsets.all(1.0),
+                child: OutlinedButton(
+                    onPressed: () {},
+                    child: Row(
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            handleChangePage("Sign Up");
+                          },
+                          child: const Text(
+                            "Sign Up",
+                            style: TextStyle(color: (Colors.black)),
+                          ),
                         ),
-                      ),
-                      const Text("/"),
-                      InkWell(
-                        onTap: () {
-                          handleChangePage("Sign In");
-                        },
-                        child: const Text("Sign In",
-                            style: TextStyle(color: (Colors.black))),
-                      ),
-                    ],
-                  )),
+                        const Text("/"),
+                        InkWell(
+                          onTap: () {
+                            handleChangePage("Sign In");
+                          },
+                          child: const Text("Sign In",
+                              style: TextStyle(color: (Colors.black))),
+                        ),
+                      ],
+                    )),
+              ),
             )
         ],
       ),
@@ -308,24 +334,8 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       // ignore: avoid_unnecessary_containers
       body: Container(
-          child: Center(
-              child: currentPage == "Profile"
-                  ? const ProfilePage()
-                  : currentPage == "About Us"
-                      ? const AboutUsPage()
-                      : currentPage == "Contact Us"
-                          ? const ContactUsPage()
-                          : currentPage == "Users"
-                              ? const UsersPage()
-                              : currentPage == "Courses"
-                                  ? const CoursesPage()
-                                  : currentPage == "Sign Up"
-                                      ? const SignUpPage()
-                                      : currentPage == "Sign In"
-                                          ? const SignInPage()
-                                          : currentPage == "Update Profile"
-                                              ? const UpdateProfilePage()
-                                              : const HomePage())),
+        child: pages[currentPage] ?? pages["Home"],
+      ),
       floatingActionButton: FloatingActionButton(
         tooltip: 'Increment',
         onPressed: () {},

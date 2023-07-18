@@ -27,6 +27,7 @@ Future login(email, password) async {
         .post('$baseURL/login', data: {'email': email, 'password': password});
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString('token', response.data[0]["token"]);
+    prefs.setString('user_id', response.data[0]["id"]);
     Get.snackbar('', '${response.data[0]["name"]}, Successfully Logged In',
         boxShadows: [const BoxShadow(color: Colors.black)],
         backgroundColor: (Colors.white),
@@ -52,6 +53,50 @@ Future<List> profile() async {
     List profileData = response.data;
 
     return profileData;
+  } catch (e) {
+    print(e);
+    throw Exception();
+  }
+}
+
+Future<List> updateProfile(
+    name, gender, country, city, state, phone, profileUrl, zipcode, dob) async {
+  try {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    final response = await dio.put('$baseURL/profile', data: {
+      'id': prefs.getString('user_id'),
+      'name': name,
+      'gender': gender,
+      'country': country,
+      'city': city,
+      'state': state,
+      'phone': phone,
+      'profile_url': profileUrl,
+      'zipcode': zipcode,
+      'dob': dob
+    });
+    print(response);
+    Get.offAll(() => MyHomePage(
+          title: "Edu-Villa™",
+          page: "Profile",
+        ));
+    var updateProfile = response.data;
+    return updateProfile;
+  } catch (e) {
+    print(e);
+    throw Exception();
+  }
+}
+
+Future<List> courses() async {
+  try {
+    final response = await dio.get(
+      '$baseURL/courses',
+    );
+    print('$response-----Courses');
+    List courses = response.data;
+    return courses;
   } catch (e) {
     print(e);
     throw Exception();
