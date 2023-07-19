@@ -14,9 +14,11 @@ class _CoursePageState extends State<CoursePage> {
 
   void courseData() async {
     var dataCourse = await course(widget.course_id);
-    setState(() {
-      data = dataCourse[0];
-    });
+    if (mounted) {
+      setState(() {
+        data = dataCourse[0];
+      });
+    }
   }
 
   @override
@@ -27,18 +29,47 @@ class _CoursePageState extends State<CoursePage> {
     super.initState();
   }
 
+  final GlobalKey<ScaffoldState> chapters = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        key: chapters,
         appBar: AppBar(
           elevation: 20,
           title: Text('${data['heading']}'),
-          actions: const [
-            Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Icon(Icons.menu),
+          actions: [
+            InkWell(
+              onTap: () {
+                chapters.currentState!.openEndDrawer();
+              },
+              child: const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Icon(Icons.menu),
+              ),
             )
           ],
+        ),
+        endDrawer: Drawer(
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: [
+              const DrawerHeader(
+                child: Text('Drawer Header'),
+              ),
+              ListTile(
+                title: const Text('Item 1'),
+                onTap: () {
+                  chapters.currentState!.closeEndDrawer();
+                },
+              ),
+              ListTile(
+                title: const Text('Item 2'),
+                onTap: () {
+                  chapters.currentState!.closeEndDrawer();
+                },
+              ),
+            ],
+          ),
         ),
         body: Padding(
           padding: const EdgeInsets.all(12.0),

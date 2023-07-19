@@ -83,7 +83,7 @@ class _CoursesPageState extends State<CoursesPage> {
                                         topRight: Radius.circular(5.0))),
                                 child: Image(
                                   image: NetworkImage(
-                                      "${coursesData[index]['image_url']}"),
+                                      "${coursesData[index]?['image_url']}"),
                                   errorBuilder: (context, error, stackTrace) =>
                                       const Text('Loading'),
                                 ),
