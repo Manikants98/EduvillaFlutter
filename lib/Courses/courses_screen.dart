@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mkx/APIs/apis.dart';
+import 'package:mkx/Course/course_screen.dart';
 
 class CoursesPage extends StatefulWidget {
   const CoursesPage({super.key});
@@ -17,7 +18,7 @@ class _CoursesPageState extends State<CoursesPage> {
       isLoading = true;
     });
     List data = await courses();
-    if (data.isNotEmpty) {
+    if (data.isNotEmpty && mounted) {
       setState(() {
         coursesData = data;
       });
@@ -45,12 +46,21 @@ class _CoursesPageState extends State<CoursesPage> {
                 height: 800,
                 child: GridView.builder(
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2, childAspectRatio: 1),
+                      crossAxisCount: 2, childAspectRatio: 0.67),
                   padding: const EdgeInsets.only(bottom: 40),
                   itemCount: coursesData.length,
                   itemBuilder: (context, index) {
-                    return Padding(
-                      padding: const EdgeInsets.all(2.0),
+                    return InkWell(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => CoursePage(
+                                course_id: coursesData[index]['id'],
+                              ),
+                            ));
+                      },
+                      splashColor: Colors.transparent,
                       child: Card(
                         color: Colors.white,
                         elevation: 2.0,
@@ -61,14 +71,21 @@ class _CoursesPageState extends State<CoursesPage> {
                           height: 200,
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              Center(
+                              Card(
+                                elevation: 0.4,
+                                margin: const EdgeInsets.all(0),
+                                clipBehavior: Clip.antiAlias,
+                                shape: const RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(5.0),
+                                        topRight: Radius.circular(5.0))),
                                 child: Image(
-                                  height: 120,
                                   image: NetworkImage(
                                       "${coursesData[index]['image_url']}"),
                                   errorBuilder: (context, error, stackTrace) =>
-                                      const CircularProgressIndicator(),
+                                      const Text('Loading'),
                                 ),
                               ),
                               const SizedBox(height: 5.0),

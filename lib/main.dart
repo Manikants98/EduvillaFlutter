@@ -124,6 +124,9 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         elevation: 20,
         title: InkWell(
+          splashColor: Colors.transparent,
+          hoverColor: Colors.transparent,
+          focusColor: Colors.transparent,
           onTap: () {
             handleChangePage("Home");
           },

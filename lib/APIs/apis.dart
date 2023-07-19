@@ -102,3 +102,17 @@ Future<List> courses() async {
     throw Exception();
   }
 }
+
+Future<List> course(id) async {
+  try {
+    final response = await dio.get(
+      '$baseURL/courses?id=$id',
+    );
+    print('$response-----Course');
+    List course = response.data;
+    return course;
+  } catch (e) {
+    print(e);
+    throw Exception();
+  }
+}
