@@ -37,7 +37,8 @@ dependencies:
   dio: ^5.2.1+1
   get:
   shimmer: ^3.0.0
-  flutter_html:
+  flutter_widget_from_html: ^0.10.3
+  syncfusion_flutter_charts: ^22.1.39
   shared_preferences:
 dev_dependencies:
   flutter_test:

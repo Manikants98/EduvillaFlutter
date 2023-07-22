@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:mkx/APIs/apis.dart';
 
 class CoursePage extends StatefulWidget {
-  final String course_id;
-  const CoursePage({super.key, required this.course_id});
+  final String courseId;
+  const CoursePage({super.key, required this.courseId});
 
   @override
   State<CoursePage> createState() => _CoursePageState();
@@ -13,23 +13,32 @@ class CoursePage extends StatefulWidget {
 class _CoursePageState extends State<CoursePage> {
   var data = {};
   var chapter = '';
-
-  void courseData() async {
-    var dataCourse = await course(widget.course_id);
-    if (mounted) {
-      setState(() {
-        data = dataCourse[0];
-      });
-    }
-  }
+  var isLoading = false;
 
   @override
   void initState() {
     if (mounted) {
       courseData();
-      print('$chapter ----Chapter');
     }
     super.initState();
+  }
+
+  void courseData() async {
+    setState(() {
+      isLoading = true;
+    });
+    var dataCourse = await course(widget.courseId);
+    if (mounted) {
+      setState(() {
+        data = dataCourse[0];
+        chapter = dataCourse[0]?["chapters"]?[0]?['chapter_id'];
+      });
+      if (data.isNotEmpty) {
+        setState(() {
+          isLoading = false;
+        });
+      }
+    }
   }
 
   final GlobalKey<ScaffoldState> chapters = GlobalKey<ScaffoldState>();
@@ -38,17 +47,13 @@ class _CoursePageState extends State<CoursePage> {
     final chaptersData = data['chapters'];
     final chapterData = chaptersData
         ?.firstWhere((i) => i['chapter_id'] == chapter, orElse: () => null);
-    Widget buildChapterDescription(Map<String, dynamic>? chapterData) {
-      final chapterDescription = chapterData!['chapter_description'] ?? '';
-
-      return Html(data: chapterDescription);
-    }
 
     return Scaffold(
         key: chapters,
         appBar: AppBar(
           elevation: 20,
-          title: Text('${data['heading']}'),
+          title:
+              isLoading ? const Text('Loading...') : Text('${data['heading']}'),
           actions: [
             InkWell(
               onTap: () {
@@ -67,6 +72,8 @@ class _CoursePageState extends State<CoursePage> {
             child: Column(
               children: [
                 ListTile(
+                  contentPadding: EdgeInsets.all(0),
+                  horizontalTitleGap: 10,
                   title: Text(
                     '${data['heading']}',
                     style: const TextStyle(color: Colors.red, fontSize: 20),
@@ -76,8 +83,16 @@ class _CoursePageState extends State<CoursePage> {
                   child: ListView.builder(
                     itemCount: data['chapters']?.length,
                     itemBuilder: (context, index) => ListTile(
+                      textColor:
+                          data['chapters'][index]['chapter_id'] == chapter
+                              ? Colors.white
+                              : Colors.black,
+                      tileColor:
+                          data['chapters'][index]['chapter_id'] == chapter
+                              ? Colors.cyan
+                              : Colors.transparent,
                       title:
-                          Text('${data['chapters'][index]!['chapter_title']}'),
+                          Text('${data['chapters']?[index]!['chapter_title']}'),
                       onTap: () {
                         setState(() {
                           chapter = data['chapters'][index]['chapter_id'];
@@ -91,26 +106,44 @@ class _CoursePageState extends State<CoursePage> {
             ),
           ),
         ),
-        body: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: Column(
-            children: [
-              Image(
-                image: NetworkImage('${data['image_url']}'),
-                errorBuilder: (context, error, stackTrace) =>
-                    const Text('Loading...'),
-              ),
-              Column(
-                children: [
-                  Text('${data['heading']}'),
-                  Text('${chapterData!["chapter_title"]}'),
-                  Container(
-                    child: buildChapterDescription(chapterData),
-                  )
-                ],
-              ),
-            ],
-          ),
-        ));
+        body: isLoading
+            ? const Center(
+                child: CircularProgressIndicator(),
+              )
+            : SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Column(
+                    children: [
+                      Image(
+                        image: NetworkImage('${data['image_url']}'),
+                        errorBuilder: (context, error, stackTrace) =>
+                            const Text('Loading...'),
+                      ),
+                      Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text('${data['heading']}'),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              '${chapterData?["chapter_title"]}',
+                              style: const TextStyle(fontSize: 30),
+                            ),
+                          ),
+                          HtmlWidget(
+                            '${chapterData?["chapter_description"]}',
+                          ),
+                          HtmlWidget(
+                            '${chapterData?["chapter_content"]}',
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ));
   }
 }

@@ -56,7 +56,7 @@ class _CoursesPageState extends State<CoursesPage> {
                             context,
                             MaterialPageRoute(
                               builder: (context) => CoursePage(
-                                course_id: coursesData[index]['id'],
+                                courseId: coursesData[index]['id'],
                               ),
                             ));
                       },
@@ -85,7 +85,8 @@ class _CoursesPageState extends State<CoursesPage> {
                                   image: NetworkImage(
                                       "${coursesData[index]?['image_url']}"),
                                   errorBuilder: (context, error, stackTrace) =>
-                                      const Text('Loading'),
+                                      Image.asset(
+                                          'asset/images/placeholder.jpg'),
                                 ),
                               ),
                               const SizedBox(height: 5.0),

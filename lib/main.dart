@@ -1,4 +1,4 @@
-// ignore_for_file: must_be_immutable
+// ignore_for_file: must_be_immutable, prefer_const_constructors
 // unnecessary_non_null_assertion
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -341,7 +341,28 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       floatingActionButton: FloatingActionButton(
         tooltip: 'Increment',
-        onPressed: () {},
+        onPressed: () {
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: Text(
+                  'Welcome to Edu-Villa™',
+                  style: TextStyle(fontSize: 20),
+                ),
+                content: Text('This is an example of AlertDialog.'),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Text('Close'),
+                  ),
+                ],
+              );
+            },
+          );
+        },
         child: const Icon(Icons.message),
       ),
     );

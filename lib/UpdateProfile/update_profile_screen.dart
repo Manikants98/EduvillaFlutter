@@ -38,7 +38,7 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
                   children: [
                     Text(
                       "Update Profile",
-                      style: TextStyle(fontSize: 40),
+                      style: TextStyle(fontSize: 30),
                     ),
                     Text("Ready to get started? Update Profile now!"),
                   ],
@@ -57,114 +57,90 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
               ),
               Padding(
                 padding: const EdgeInsets.all(10.0),
-                child: SizedBox(
-                  height: 50.0,
-                  child: TextFormField(
-                    controller: nameController,
-                    decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        hintText: 'Enter Your Name',
-                        labelText: "Name"),
-                    // The validator receives the text that the user has entered.
-                  ),
+                child: TextFormField(
+                  controller: nameController,
+                  decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      hintText: 'Enter Your Name',
+                      labelText: "Name"),
+                  // The validator receives the text that the user has entered.
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.all(10.0),
-                child: SizedBox(
-                  height: 50.0,
-                  child: TextFormField(
-                    controller: dobController,
-                    decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        hintText: 'Enter Your Date Of Birth',
-                        labelText: "DOB"),
-                    // The validator receives the text that the user has entered.
-                  ),
+                child: TextFormField(
+                  controller: dobController,
+                  decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      hintText: 'Enter Your Date Of Birth',
+                      labelText: "DOB"),
+                  // The validator receives the text that the user has entered.
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.all(10.0),
-                child: SizedBox(
-                  height: 50.0,
-                  child: TextFormField(
-                    controller: genderController,
-                    decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        hintText: 'Enter Your Gender',
-                        labelText: "Gender"),
-                    // The validator receives the text that the user has entered.
-                  ),
+                child: TextFormField(
+                  controller: genderController,
+                  decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      hintText: 'Enter Your Gender',
+                      labelText: "Gender"),
+                  // The validator receives the text that the user has entered.
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.all(10.0),
-                child: SizedBox(
-                  height: 50.0,
-                  child: TextFormField(
-                    controller: phoneController,
-                    decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        hintText: 'Enter Your Phone Number',
-                        labelText: "Phone"),
-                    // The validator receives the text that the user has entered.
-                  ),
+                child: TextFormField(
+                  controller: phoneController,
+                  decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      hintText: 'Enter Your Phone Number',
+                      labelText: "Phone"),
+                  // The validator receives the text that the user has entered.
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.all(10.0),
-                child: SizedBox(
-                  height: 50.0,
-                  child: TextFormField(
-                    controller: zipcodeController,
-                    decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        hintText: 'Enter Your Zipcode',
-                        labelText: "Zipcode"),
-                    // The validator receives the text that the user has entered.
-                  ),
+                child: TextFormField(
+                  controller: zipcodeController,
+                  decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      hintText: 'Enter Your Zipcode',
+                      labelText: "Zipcode"),
+                  // The validator receives the text that the user has entered.
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.all(10.0),
-                child: SizedBox(
-                  height: 50.0,
-                  child: TextFormField(
-                    controller: countryController,
-                    decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        hintText: 'Enter Your Country',
-                        labelText: "Cuntry"),
-                    // The validator receives the text that the user has entered.
-                  ),
+                child: TextFormField(
+                  controller: countryController,
+                  decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      hintText: 'Enter Your Country',
+                      labelText: "Cuntry"),
+                  // The validator receives the text that the user has entered.
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.all(10.0),
-                child: SizedBox(
-                  height: 50.0,
-                  child: TextFormField(
-                    controller: stateController,
-                    decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        hintText: 'Enter Your State',
-                        labelText: "State"),
-                    // The validator receives the text that the user has entered.
-                  ),
+                child: TextFormField(
+                  controller: stateController,
+                  decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      hintText: 'Enter Your State',
+                      labelText: "State"),
+                  // The validator receives the text that the user has entered.
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.all(10.0),
-                child: SizedBox(
-                  height: 50.0,
-                  child: TextFormField(
-                    controller: cityController,
-                    decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        hintText: 'Enter Your City',
-                        labelText: "City"),
-                    // The validator receives the text that the user has entered.
-                  ),
+                child: TextFormField(
+                  controller: cityController,
+                  decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      hintText: 'Enter Your City',
+                      labelText: "City"),
+                  // The validator receives the text that the user has entered.
                 ),
               ),
               Padding(
