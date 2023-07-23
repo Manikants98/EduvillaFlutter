@@ -26,14 +26,20 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         fontFamily: 'Poppins',
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
-        // colorScheme: const ColorScheme.dark(),
+        colorScheme: ColorScheme.light(primary: Colors.black),
+        dividerTheme: DividerThemeData(color: Colors.black26),
         useMaterial3: true,
       ),
+      darkTheme: ThemeData(
+        fontFamily: 'Poppins',
+        colorScheme: ColorScheme.dark(primary: Colors.white),
+        dividerTheme: DividerThemeData(color: Colors.white24),
+        useMaterial3: true,
+      ),
+      themeMode: ThemeMode.system,
       home: MyHomePage(title: 'Home Page'),
     );
   }
@@ -63,6 +69,7 @@ class _MyHomePageState extends State<MyHomePage> {
       setState(() {
         currentPage = page;
       });
+      scaffoldKey.currentState?.closeDrawer();
     }
   }
 
@@ -122,11 +129,9 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       key: scaffoldKey,
       appBar: AppBar(
-        elevation: 20,
+        elevation: 10,
         title: InkWell(
           splashColor: Colors.transparent,
-          hoverColor: Colors.transparent,
-          focusColor: Colors.transparent,
           onTap: () {
             handleChangePage("Home");
           },
@@ -238,33 +243,30 @@ class _MyHomePageState extends State<MyHomePage> {
                 })
           else
             Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Padding(
-                padding: const EdgeInsets.all(1.0),
-                child: OutlinedButton(
-                    onPressed: () {},
-                    child: Row(
-                      children: [
-                        InkWell(
-                          onTap: () {
-                            handleChangePage("Sign Up");
-                          },
-                          child: const Text(
-                            "Sign Up",
-                            style: TextStyle(color: (Colors.black)),
-                          ),
+              padding: const EdgeInsets.all(10.0),
+              child: ElevatedButton(
+                  onPressed: () {},
+                  child: Row(
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          handleChangePage("Sign Up");
+                        },
+                        child: const Text(
+                          "Sign Up",
                         ),
-                        const Text("/"),
-                        InkWell(
-                          onTap: () {
-                            handleChangePage("Sign In");
-                          },
-                          child: const Text("Sign In",
-                              style: TextStyle(color: (Colors.black))),
+                      ),
+                      const Text("/"),
+                      InkWell(
+                        onTap: () {
+                          handleChangePage("Sign In");
+                        },
+                        child: const Text(
+                          "Sign In",
                         ),
-                      ],
-                    )),
-              ),
+                      ),
+                    ],
+                  )),
             )
         ],
       ),
@@ -288,7 +290,6 @@ class _MyHomePageState extends State<MyHomePage> {
               title: const Text('Home'),
               onTap: () {
                 handleChangePage("Home");
-                scaffoldKey.currentState?.closeDrawer();
               },
             ),
             ListTile(
@@ -296,8 +297,6 @@ class _MyHomePageState extends State<MyHomePage> {
               title: const Text('Profile'),
               onTap: () {
                 handleChangePage("Profile");
-                print(isLoggedIn);
-                scaffoldKey.currentState?.closeDrawer();
               },
             ),
             ListTile(
@@ -305,7 +304,6 @@ class _MyHomePageState extends State<MyHomePage> {
               title: const Text('Courses'),
               onTap: () {
                 handleChangePage("Courses");
-                scaffoldKey.currentState?.closeDrawer();
               },
             ),
             ListTile(
@@ -313,7 +311,6 @@ class _MyHomePageState extends State<MyHomePage> {
               title: const Text('Users'),
               onTap: () {
                 handleChangePage("Users");
-                scaffoldKey.currentState?.closeDrawer();
               },
             ),
             ListTile(
@@ -321,7 +318,6 @@ class _MyHomePageState extends State<MyHomePage> {
               title: const Text('Contact Us'),
               onTap: () {
                 handleChangePage("Contact Us");
-                scaffoldKey.currentState?.closeDrawer();
               },
             ),
             ListTile(
@@ -329,7 +325,6 @@ class _MyHomePageState extends State<MyHomePage> {
               title: const Text('About Us'),
               onTap: () {
                 handleChangePage("About Us");
-                scaffoldKey.currentState?.closeDrawer();
               },
             ),
           ],
@@ -347,7 +342,7 @@ class _MyHomePageState extends State<MyHomePage> {
             builder: (BuildContext context) {
               return AlertDialog(
                 title: Text(
-                  'Welcome to Edu-Villa™',
+                  'Welcome Edu-Villa™',
                   style: TextStyle(fontSize: 20),
                 ),
                 content: Text('This is an example of AlertDialog.'),

@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:mkx/APIs/apis.dart';
@@ -31,7 +33,7 @@ class _CoursePageState extends State<CoursePage> {
     if (mounted) {
       setState(() {
         data = dataCourse[0];
-        chapter = dataCourse[0]?["chapters"]?[0]?['chapter_id'];
+        chapter = dataCourse[0]?["chapters"]?[0]?['chapter_id'] ?? "";
       });
       if (data.isNotEmpty) {
         setState(() {
@@ -66,44 +68,44 @@ class _CoursePageState extends State<CoursePage> {
             )
           ],
         ),
-        endDrawer: Padding(
-          padding: const EdgeInsets.only(top: 38.0),
-          child: Drawer(
-            child: Column(
-              children: [
-                ListTile(
-                  contentPadding: EdgeInsets.all(0),
-                  horizontalTitleGap: 10,
-                  title: Text(
-                    '${data['heading']}',
-                    style: const TextStyle(color: Colors.red, fontSize: 20),
-                  ),
-                ),
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: data['chapters']?.length,
-                    itemBuilder: (context, index) => ListTile(
-                      textColor:
-                          data['chapters'][index]['chapter_id'] == chapter
-                              ? Colors.white
-                              : Colors.black,
-                      tileColor:
-                          data['chapters'][index]['chapter_id'] == chapter
-                              ? Colors.cyan
-                              : Colors.transparent,
-                      title:
-                          Text('${data['chapters']?[index]!['chapter_title']}'),
-                      onTap: () {
-                        setState(() {
-                          chapter = data['chapters'][index]['chapter_id'];
-                        });
-                        chapters.currentState!.closeEndDrawer();
-                      },
+        endDrawer: Drawer(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Expanded(
+                child: ListView.builder(
+                  itemCount: data['chapters']?.length,
+                  itemBuilder: (context, index) => Padding(
+                    padding: const EdgeInsets.only(left: 3, right: 3),
+                    child: Card(
+                      color: data['chapters']?[index]?['chapter_id'] == chapter
+                          ? Colors.black
+                          : Colors.transparent,
+                      elevation: 0,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8.0)),
+                      child: ListTile(
+                        visualDensity: VisualDensity.compact,
+                        textColor:
+                            data['chapters'][index]['chapter_id'] == chapter
+                                ? Colors.white
+                                : Colors.black,
+                        title: Text(
+                          '${data['chapters']?[index]!['chapter_title']}',
+                          style: TextStyle(fontWeight: FontWeight.w500),
+                        ),
+                        onTap: () {
+                          setState(() {
+                            chapter = data['chapters'][index]['chapter_id'];
+                          });
+                          chapters.currentState!.closeEndDrawer();
+                        },
+                      ),
                     ),
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
         body: isLoading

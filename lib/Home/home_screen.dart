@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:syncfusion_flutter_charts/charts.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -27,10 +26,6 @@ class _HomePageState extends State<HomePage> {
             child: Image.asset('asset/images/homepage.png'),
           ),
           const Center(child: Text("Home")),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Container(child: SfCartesianChart()),
-          )
         ],
       ),
     ));

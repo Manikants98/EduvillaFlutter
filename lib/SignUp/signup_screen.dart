@@ -1,4 +1,4 @@
-// ignore_for_file: unrelated_type_equality_checks, use_build_context_synchronously
+// ignore_for_file: unrelated_type_equality_checks, use_build_context_synchronously, prefer_const_constructors
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -113,29 +113,38 @@ class _SignUpPageState extends State<SignUpPage> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 16),
-                child: ElevatedButton(
-                  onPressed: () async {
-                    if (_formKey.currentState!.validate()) {
-                      await register(nameController.text, emailController.text,
-                          passwordController.text);
-                    }
-                  },
-                  child: const Text('Sign Up'),
+                padding: const EdgeInsets.all(8),
+                child: SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      if (_formKey.currentState!.validate()) {
+                        await register(nameController.text,
+                            emailController.text, passwordController.text);
+                      }
+                    },
+                    child: const Text('Sign Up'),
+                  ),
                 ),
               ),
               const Divider(),
-              const Text("Already have an account"),
+              const Text(
+                "Already have an account",
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
               Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: ElevatedButton(
-                    onPressed: () {
-                      Get.offAll(() => MyHomePage(
-                            title: "Edu-Villa™",
-                            page: "Sign In",
-                          ));
-                    },
-                    child: const Text("Sign In")),
+                padding: const EdgeInsets.all(8),
+                child: SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                      onPressed: () {
+                        Get.offAll(() => MyHomePage(
+                              title: "Edu-Villa™",
+                              page: "Sign In",
+                            ));
+                      },
+                      child: const Text("Sign In")),
+                ),
               )
             ],
           ),

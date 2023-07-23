@@ -38,7 +38,7 @@ dependencies:
   get:
   shimmer: ^3.0.0
   flutter_widget_from_html: ^0.10.3
-  syncfusion_flutter_charts: ^22.1.39
+  wakelock: ^0.6.2
   shared_preferences:
 dev_dependencies:
   flutter_test:

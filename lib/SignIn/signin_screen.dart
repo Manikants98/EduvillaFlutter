@@ -74,29 +74,35 @@ class _SignInPageState extends State<SignInPage> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 16),
-                child: ElevatedButton(
-                  onPressed: () async {
-                    if (_formKey.currentState!.validate()) {
-                      await login(
-                          emailController.text, passwordController.text);
-                    }
-                  },
-                  child: const Text('Sign In'),
+                padding: const EdgeInsets.all(8),
+                child: SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      if (_formKey.currentState!.validate()) {
+                        await login(
+                            emailController.text, passwordController.text);
+                      }
+                    },
+                    child: const Text('Sign In'),
+                  ),
                 ),
               ),
               const Divider(),
               const Text("Don't have an account"),
               Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: ElevatedButton(
-                    onPressed: () {
-                      Get.offAll(() => MyHomePage(
-                            title: "Edu-Villa™",
-                            page: "Sign Up",
-                          ));
-                    },
-                    child: const Text("Sign Up")),
+                padding: const EdgeInsets.all(8.0),
+                child: SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                      onPressed: () {
+                        Get.offAll(() => MyHomePage(
+                              title: "Edu-Villa™",
+                              page: "Sign Up",
+                            ));
+                      },
+                      child: const Text("Sign Up")),
+                ),
               )
             ],
           ),
