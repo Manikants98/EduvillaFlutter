@@ -11,10 +11,19 @@ Future register(name, email, password) async {
   try {
     final response = await dio.post('$baseURL/register',
         data: {'name': name, 'email': email, 'password': password});
+    Get.snackbar('Notification', 'Hurray! You signup successfully',
+        boxShadows: [const BoxShadow(color: Colors.grey)],
+        backgroundColor: (Colors.white),
+        borderColor: Colors.grey,
+        borderWidth: 1,
+        borderRadius: 3,
+        margin: const EdgeInsets.all(10),
+        snackPosition: SnackPosition.BOTTOM);
     Get.offAll(() => MyHomePage(
           title: "Edu-Villa™",
           page: "Sign In",
         ));
+    print('$response---Signup');
     return response;
   } catch (e) {
     throw Exception();
@@ -28,9 +37,14 @@ Future login(email, password) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString('token', response.data[0]["token"]);
     prefs.setString('user_id', response.data[0]["id"]);
-    Get.snackbar('', '${response.data[0]["name"]}, Successfully Logged In',
-        boxShadows: [const BoxShadow(color: Colors.black)],
+    Get.snackbar(
+        'Notification', 'Hurray! ${response.data[0]["name"]}login successfully',
+        boxShadows: [const BoxShadow(color: Colors.grey)],
         backgroundColor: (Colors.white),
+        borderColor: Colors.grey,
+        borderWidth: 1,
+        borderRadius: 3,
+        margin: const EdgeInsets.all(10),
         snackPosition: SnackPosition.BOTTOM);
     Get.offAll(() => MyHomePage(
           title: "Edu-Villa™",
@@ -111,6 +125,31 @@ Future<List> course(id) async {
     print('$response-----Course');
     List course = response.data;
     return course;
+  } catch (e) {
+    print(e);
+    throw Exception();
+  }
+}
+
+Future contactUs(name, email, message) async {
+  try {
+    final response = await dio.post('$baseURL/contact-us',
+        data: {'name': name, 'email': email, 'message': message});
+    Get.snackbar('Notification', '${response.data} to Edu-Villa™',
+        boxShadows: [const BoxShadow(color: Colors.grey)],
+        backgroundColor: (Colors.white),
+        borderColor: Colors.grey,
+        borderWidth: 1,
+        borderRadius: 3,
+        margin: const EdgeInsets.all(10),
+        snackPosition: SnackPosition.BOTTOM);
+
+    // Get.offAll(() => MyHomePage(
+    //       title: "Edu-Villa™",
+    //       page: "Home",
+    //     ));
+
+    return response;
   } catch (e) {
     print(e);
     throw Exception();

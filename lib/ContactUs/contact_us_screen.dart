@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:mkx/APIs/apis.dart';
 
 class ContactUsPage extends StatefulWidget {
   const ContactUsPage({super.key});
@@ -18,10 +19,7 @@ class _ContactUsPageState extends State<ContactUsPage> {
 
   void _submitForm() {
     if (_formKey.currentState!.validate()) {
-      // Perform the form submission logic here
-      print('Name: $_name');
-      print('Email: $_email');
-      print('Message: $_message');
+      contactUs(_name, _email, _message);
     }
   }
 

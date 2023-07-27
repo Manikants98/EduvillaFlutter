@@ -150,7 +150,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 position: PopupMenuPosition.under,
                 offset: const Offset(11, 11),
                 icon: isLoading
-                    ? const CircularProgressIndicator()
+                    ? const CircularProgressIndicator(
+                        strokeWidth: 2,
+                      )
                     : CircleAvatar(
                         backgroundImage:
                             NetworkImage(('${profiles['profile_url']}')),
