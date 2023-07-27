@@ -151,7 +151,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 offset: const Offset(11, 11),
                 icon: isLoading
                     ? const CircularProgressIndicator(
-                        strokeWidth: 2,
+                        strokeWidth: 3,
                       )
                     : CircleAvatar(
                         backgroundImage:
