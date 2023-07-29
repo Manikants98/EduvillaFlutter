@@ -1,4 +1,6 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, prefer_typing_uninitialized_variables
+
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
@@ -16,12 +18,14 @@ class _CoursePageState extends State<CoursePage> {
   var data = {};
   var chapter = '';
   var isLoading = false;
+  var commentsData;
 
   @override
   void initState() {
     if (mounted) {
       courseData();
     }
+
     super.initState();
   }
 
@@ -35,11 +39,29 @@ class _CoursePageState extends State<CoursePage> {
         data = dataCourse[0];
         chapter = dataCourse[0]?["chapters"]?[0]?['chapter_id'] ?? "";
       });
+      commentFn(dataCourse[0]?["chapters"]?[0]?['chapter_id']);
       if (data.isNotEmpty) {
         setState(() {
           isLoading = false;
         });
       }
+    }
+  }
+
+  void commentFn(id) async {
+    setState(() {
+      isLoading = true;
+    });
+    List data = await comments(id);
+
+    if (data.toString().isNotEmpty && mounted) {
+      setState(() {
+        commentsData = data;
+      });
+      print('$data caals');
+      setState(() {
+        isLoading = false;
+      });
     }
   }
 
@@ -98,6 +120,7 @@ class _CoursePageState extends State<CoursePage> {
                           setState(() {
                             chapter = data['chapters'][index]['chapter_id'];
                           });
+                          commentFn(data['chapters'][index]['chapter_id']);
                           chapters.currentState!.closeEndDrawer();
                         },
                       ),
@@ -112,40 +135,52 @@ class _CoursePageState extends State<CoursePage> {
             ? const Center(
                 child: CircularProgressIndicator(),
               )
-            : SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: Column(
-                    children: [
-                      Image(
-                        image: NetworkImage('${data['image_url']}'),
-                        errorBuilder: (context, error, stackTrace) =>
-                            const Text('Loading...'),
-                      ),
-                      Column(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text('${data['heading']}'),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              '${chapterData?["chapter_title"]}',
-                              style: const TextStyle(fontSize: 30),
+            : ListView(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Column(
+                      children: [
+                        Image(
+                          image: NetworkImage('${data?['image_url']}'),
+                          errorBuilder: (context, error, stackTrace) =>
+                              const Text('Loading...'),
+                        ),
+                        Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text('${data?['heading']}'),
                             ),
-                          ),
-                          HtmlWidget(
-                            '${chapterData?["chapter_description"]}',
-                          ),
-                          HtmlWidget(
-                            '${chapterData?["chapter_content"]}',
-                          ),
-                        ],
-                      ),
-                    ],
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                '${chapterData?["chapter_title"]}',
+                                style: const TextStyle(fontSize: 30),
+                              ),
+                            ),
+                            HtmlWidget(
+                              '${chapterData?["chapter_description"]}',
+                            ),
+                            HtmlWidget(
+                              '${chapterData?["chapter_content"]}',
+                            ),
+                          ],
+                        ),
+                        ListView.builder(
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          itemCount: commentsData?.length,
+                          itemBuilder: (context, index) {
+                            return ListTile(
+                              title: Text('${commentsData[index]?["name"]}'),
+                            );
+                          },
+                        ),
+                      ],
+                    ),
                   ),
-                ),
+                ],
               ));
   }
 }

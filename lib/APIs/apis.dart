@@ -143,13 +143,24 @@ Future contactUs(name, email, message) async {
         borderRadius: 3,
         margin: const EdgeInsets.all(10),
         snackPosition: SnackPosition.BOTTOM);
-
-    // Get.offAll(() => MyHomePage(
-    //       title: "Edu-Villa™",
-    //       page: "Home",
-    //     ));
-
+    Get.offAll(() => MyHomePage(
+          title: "Edu-Villa™",
+          page: "Home",
+        ));
     return response;
+  } catch (e) {
+    throw Exception();
+  }
+}
+
+Future<List> comments(id) async {
+  try {
+    final response = await dio.get(
+      '$baseURL/comments?chapter_id=$id',
+    );
+    print('$response-----comment');
+    List comment = response.data;
+    return comment;
   } catch (e) {
     print(e);
     throw Exception();

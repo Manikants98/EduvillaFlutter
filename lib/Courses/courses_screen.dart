@@ -45,8 +45,8 @@ class _CoursesPageState extends State<CoursesPage> {
               height: 800,
               child: Shimmer.fromColors(
                 period: Duration(seconds: 2),
-                baseColor: Color.fromRGBO(128, 128, 128, 0.7),
-                highlightColor: Color.fromRGBO(128, 128, 128, 0.8),
+                baseColor: Color.fromRGBO(207, 207, 207, 1),
+                highlightColor: Color.fromRGBO(210, 210, 210, 1),
                 child: GridView.builder(
                     gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(
@@ -84,7 +84,7 @@ class _CoursesPageState extends State<CoursesPage> {
                             context,
                             MaterialPageRoute(
                               builder: (context) => CoursePage(
-                                courseId: coursesData[index]['id'],
+                                courseId: coursesData[index]?['id'],
                               ),
                             ));
                       },
@@ -110,10 +110,9 @@ class _CoursesPageState extends State<CoursesPage> {
                                         topRight: Radius.circular(5.0))),
                                 child: Image(
                                   image: NetworkImage(
-                                      "${coursesData[index]?['image_url']}"),
+                                      "${coursesData[index]?['image_url'].toString()}"),
                                   errorBuilder: (context, error, stackTrace) =>
-                                      Image.asset(
-                                          'asset/images/placeholder.jpg'),
+                                      const Text('Loading...'),
                                 ),
                               ),
                               const SizedBox(height: 5.0),
