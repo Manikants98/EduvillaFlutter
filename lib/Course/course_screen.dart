@@ -1,7 +1,4 @@
 // ignore_for_file: prefer_const_constructors, prefer_typing_uninitialized_variables
-
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:mkx/APIs/apis.dart';
@@ -48,17 +45,17 @@ class _CoursePageState extends State<CoursePage> {
     }
   }
 
-  void commentFn(id) async {
+  void commentFn(chapterId) async {
     setState(() {
       isLoading = true;
     });
-    List data = await comments(id);
+    List data = await comments(chapterId);
 
-    if (data.toString().isNotEmpty && mounted) {
+    if (data.toList().isNotEmpty && mounted) {
       setState(() {
         commentsData = data;
       });
-      print('$data caals');
+
       setState(() {
         isLoading = false;
       });
@@ -96,37 +93,29 @@ class _CoursePageState extends State<CoursePage> {
             children: [
               Expanded(
                 child: ListView.builder(
-                  itemCount: data['chapters']?.length,
-                  itemBuilder: (context, index) => Padding(
-                    padding: const EdgeInsets.only(left: 3, right: 3),
-                    child: Card(
-                      color: data['chapters']?[index]?['chapter_id'] == chapter
-                          ? Colors.black
-                          : Colors.transparent,
-                      elevation: 0,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8.0)),
-                      child: ListTile(
-                        visualDensity: VisualDensity.compact,
-                        textColor:
-                            data['chapters'][index]['chapter_id'] == chapter
-                                ? Colors.white
-                                : Colors.black,
-                        title: Text(
-                          '${data['chapters']?[index]!['chapter_title']}',
-                          style: TextStyle(fontWeight: FontWeight.w500),
+                    itemCount: data['chapters']?.length,
+                    itemBuilder: (context, index) {
+                      final item = data['chapters']?[index];
+                      return Padding(
+                        padding: const EdgeInsets.only(left: 3, right: 3),
+                        child: ListTile(
+                          visualDensity: VisualDensity.compact,
+                          selectedTileColor: Colors.black12,
+                          selected: item['chapter_id'] == chapter,
+                          title: Text(
+                            '${item!['chapter_title']}',
+                            style: TextStyle(fontWeight: FontWeight.w500),
+                          ),
+                          onTap: () {
+                            setState(() {
+                              chapter = item['chapter_id'];
+                            });
+                            commentFn(data['chapters'][index]['chapter_id']);
+                            chapters.currentState!.closeEndDrawer();
+                          },
                         ),
-                        onTap: () {
-                          setState(() {
-                            chapter = data['chapters'][index]['chapter_id'];
-                          });
-                          commentFn(data['chapters'][index]['chapter_id']);
-                          chapters.currentState!.closeEndDrawer();
-                        },
-                      ),
-                    ),
-                  ),
-                ),
+                      );
+                    }),
               ),
             ],
           ),
@@ -135,52 +124,62 @@ class _CoursePageState extends State<CoursePage> {
             ? const Center(
                 child: CircularProgressIndicator(),
               )
-            : ListView(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(12.0),
-                    child: Column(
-                      children: [
-                        Image(
-                          image: NetworkImage('${data?['image_url']}'),
-                          errorBuilder: (context, error, stackTrace) =>
-                              const Text('Loading...'),
-                        ),
-                        Column(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text('${data?['heading']}'),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(
-                                '${chapterData?["chapter_title"]}',
-                                style: const TextStyle(fontSize: 30),
+            : SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: Column(
+                        children: [
+                          Image(
+                            image: NetworkImage(data['image_url']),
+                            errorBuilder: (context, error, stackTrace) =>
+                                const Text('Loading...'),
+                          ),
+                          Column(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text('${data['heading']}'),
                               ),
-                            ),
-                            HtmlWidget(
-                              '${chapterData?["chapter_description"]}',
-                            ),
-                            HtmlWidget(
-                              '${chapterData?["chapter_content"]}',
-                            ),
-                          ],
-                        ),
-                        ListView.builder(
-                          shrinkWrap: true,
-                          physics: NeverScrollableScrollPhysics(),
-                          itemCount: commentsData?.length,
-                          itemBuilder: (context, index) {
-                            return ListTile(
-                              title: Text('${commentsData[index]?["name"]}'),
-                            );
-                          },
-                        ),
-                      ],
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  '${chapterData?["chapter_title"]}',
+                                  style: const TextStyle(fontSize: 30),
+                                ),
+                              ),
+                              HtmlWidget(
+                                '${chapterData?["chapter_description"]}',
+                              ),
+                              HtmlWidget(
+                                '${chapterData?["chapter_content"]}',
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                    SizedBox(
+                      height: 300,
+                      child: ListView.builder(
+                        itemCount: commentsData?.length ?? 0,
+                        itemBuilder: (context, index) {
+                          final item = commentsData![index];
+                          return ListTile(
+                            leading: CircleAvatar(
+                              child: Text(
+                                  item['name'][0].toString().toUpperCase()),
+                            ),
+                            title: Text(item['name']),
+                            subtitle: Text(item['comment']),
+                          );
+                        },
+                      ),
+                    )
+                  ],
+                ),
               ));
   }
 }

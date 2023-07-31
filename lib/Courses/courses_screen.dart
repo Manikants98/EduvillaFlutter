@@ -78,13 +78,14 @@ class _CoursesPageState extends State<CoursesPage> {
                   padding: const EdgeInsets.only(bottom: 40),
                   itemCount: coursesData.length,
                   itemBuilder: (context, index) {
+                    final item = coursesData[index];
                     return InkWell(
                       onTap: () {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: (context) => CoursePage(
-                                courseId: coursesData[index]?['id'],
+                                courseId: item?['id'],
                               ),
                             ));
                       },
@@ -109,25 +110,23 @@ class _CoursesPageState extends State<CoursesPage> {
                                         topLeft: Radius.circular(5.0),
                                         topRight: Radius.circular(5.0))),
                                 child: Image(
-                                  image: NetworkImage(
-                                      "${coursesData[index]?['image_url'].toString()}"),
-                                  errorBuilder: (context, error, stackTrace) =>
-                                      const Text('Loading...'),
+                                    image: NetworkImage(item?['image_url']),
+                                    errorBuilder:
+                                        (context, error, stackTrace) =>
+                                            Text('Loading...')),
+                              ),
+                              const SizedBox(height: 5.0),
+                              Padding(
+                                padding: const EdgeInsets.only(left: 4.0),
+                                child: Text(
+                                  '${item['category']}'.toUpperCase(),
                                 ),
                               ),
                               const SizedBox(height: 5.0),
                               Padding(
                                 padding: const EdgeInsets.only(left: 4.0),
                                 child: Text(
-                                  '${coursesData[index]['category']}'
-                                      .toUpperCase(),
-                                ),
-                              ),
-                              const SizedBox(height: 5.0),
-                              Padding(
-                                padding: const EdgeInsets.only(left: 4.0),
-                                child: Text(
-                                  coursesData[index]['heading'],
+                                  item['heading'],
                                   style: const TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 17),
